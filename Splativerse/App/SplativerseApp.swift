@@ -39,10 +39,16 @@ private struct ScanImmersiveContent: CompositorContent {
             monitor = Task { @MainActor in
                 var seenMenu: UInt64 = 0
                 var seenScanStep: UInt64 = 0
+                var seenLoadFailure: String?
                 while !Task.isCancelled {
                     let status = RenderControl.shared.snapshot()
                     guard status.sessionID == request.id else { return }
                     model.renderStatus = status
+                    if let detail = status.loadFailure, detail != seenLoadFailure {
+                        model.lastLoadFailure = detail
+                        if model.menuHidden { openWindow(id: "library"); model.menuHidden = false }
+                    }
+                    seenLoadFailure = status.loadFailure
                     if status.scanStepSequence != seenScanStep {
                         seenScanStep = status.scanStepSequence
                         await model.switchScan(by: status.scanStep,sessionID: request.id)

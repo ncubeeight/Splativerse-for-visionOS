@@ -98,9 +98,11 @@ public struct FlightController: Sendable {
     public static func leverDirection(_ deflection: SIMD2<Float>) -> SIMD3<Float> {
         simd_normalize(SIMD3(deflection.x*fullTravel,leverLength,-deflection.y*fullTravel))
     }
-    public mutating func update(head: simd_float4x4, hands: [FlightHand], deltaTime: Float, enabled: Bool, flightAllowed: Bool = true, canGoPrevious: Bool = false, canGoNext: Bool = false, panelButtonsEnabled: Bool = true) -> FlightMotion {
+    public mutating func update(head: simd_float4x4, hands: [FlightHand], deltaTime: Float, enabled: Bool, flightAllowed: Bool = true, canGoPrevious: Bool = false, canGoNext: Bool = false, panelButtonsEnabled: Bool = true, browsingAllowed: Bool? = nil) -> FlightMotion {
         panelAction = nil
-        canFly = flightAllowed; previousEnabled = flightAllowed && canGoPrevious; nextEnabled = flightAllowed && canGoNext
+        canFly = flightAllowed
+        let browse = browsingAllowed ?? flightAllowed
+        previousEnabled = browse && canGoPrevious; nextEnabled = browse && canGoNext
         if enabled && !hasPlacement { bringPanelHere(head: head) }
         guard enabled, deltaTime.isFinite, deltaTime > 0, deltaTime <= 0.15 else { reset(); return FlightMotion() }
         let valid = hands.filter(\.valid)

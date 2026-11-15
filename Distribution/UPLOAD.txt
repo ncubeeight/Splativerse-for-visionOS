@@ -1,0 +1,73 @@
+SPLATIVERSE — TESTFLIGHT PREPARATION
+Prepared November 15, 2026
+
+Version: 1.0 (1)
+Bundle identifier: com.splativerse.vision
+Developer team: 9Q3FCK2997
+Platform: Apple Vision Pro, visionOS 26.0 or later
+Build: Release, arm64, Xcode 27.2 / visionOS SDK 27.2
+
+STATUS
+The .xcarchive is built and signed with the configured Apple Development
+identity. Its signature passes strict verification; the app and dSYM UUIDs
+match. This is the standard archive to distribute through Xcode Organizer.
+It is not an App Store-signed IPA, and nothing has been uploaded.
+
+The command-line App Store Connect export failed with:
+- No Accounts: Xcode could not access the saved account credentials
+  (missing Xcode-Username).
+- No App Store provisioning profile for com.splativerse.vision.
+
+FINISH IN XCODE
+1. Confirm your App Store Connect Splativerse record uses bundle identifier
+   com.splativerse.vision and belongs to the configured developer team.
+2. Open Splativerse-1.0-1.xcarchive. In Xcode Settings > Apple Accounts,
+   confirm your Apple Developer account and team are available. Refresh or
+   sign in again if Xcode requests it; do not change the bundle ID casually.
+3. In Organizer, select the archive, choose Distribute App > App Store
+   Connect, and use automatic signing. Xcode can obtain the App Store
+   distribution certificate/profile with the appropriate account access.
+4. Review validation results and upload when ready. After Apple processes
+   the build, select version 1.0 (1) in TestFlight and configure testers.
+
+You can export an IPA without uploading from Terminal once account access is
+working, from this folder:
+  xcodebuild -exportArchive -archivePath Splativerse-1.0-1.xcarchive \
+    -exportPath Export -exportOptionsPlist ExportOptions.plist \
+    -allowProvisioningUpdates
+The export settings use destination=export, not upload.
+
+HAND TRACKING
+No special hand-tracking App ID capability checkbox is required for standard
+ARKit hand tracking. NSHandsTrackingUsageDescription is included and the app
+requests .handTracking authorization at runtime. Head-pose WorldTrackingProvider
+use does not need world-sensing authorization; the unused world-sensing
+usage description was removed. The app does not request camera-image access.
+
+PRIVACY / RESOURCES
+Included: supplied Splativerse logo as the visionOS app icon, PrivacyInfo.xcprivacy, third-party
+licenses/notices, non-exempt-encryption=false, and version/build settings.
+Required reasons: UserDefaults CA92.1; app/user-selected file metadata
+C617.1 / 3B52.1; storage availability E174.1; in-app elapsed-time measurement
+35F9.1. No tracking domains or collected data types are declared. The current
+app processes scans and hand poses locally, without analytics/upload code.
+Reassess declarations if telemetry or online hosting is added.
+
+VALIDATION
+- Signed Release visionOS archive: passed.
+- Archive icon, privacy manifest, version, bundle ID, platform: checked.
+- Signature and app/dSYM UUID match: passed.
+- Flight-panel shader compile/link, device and simulator: passed.
+- Latest logic checks: 53 core, 32 I/O, and 5 CPU renderer tests passed;
+  3 GPU tests skipped on this host.
+- App Store server validation and TestFlight upload: not performed.
+
+The reported unsupported scan remains unidentified. Loading errors now keep
+immersion open and allow browsing to another scan; the affected file itself
+has not been repaired. Check this behavior on the headset before sharing a
+wide beta. Test information and sample scans are included alongside this file.
+
+APPLE REFERENCES
+https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/
+https://developer.apple.com/documentation/visionos/setting-up-access-to-arkit-data
+https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api

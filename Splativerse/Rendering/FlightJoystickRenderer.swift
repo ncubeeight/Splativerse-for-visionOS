@@ -85,7 +85,7 @@ final class FlightJoystickRenderer {
         guard let buffer = device.makeBuffer(bytes: quads, length: quads.count * MemoryLayout<Vertex>.stride) else { throw Failure.allocation }
         quad = buffer
         labels = try ["FLY / TURN\nFORWARD FOLLOWS YOUR VIEW\nPINCH STICK TO FLY", "FLY / TURN\nFORWARD FOLLOWS YOUR VIEW\nRELEASE TO STOP",
-                      "MOVE PANEL\nPINCH THE HORIZONTAL HANDLE\nRELEASE TO PLACE", "PLACING PANEL\nFLIGHT IS PAUSED\nRELEASE TO FIX IN PLACE", "MENU", "EXIT", "PREVIOUS", "NEXT", "LOADING SCAN\nPLEASE WAIT\nMENU AND EXIT ARE AVAILABLE"].map { try Self.label($0,device: device) }
+                      "MOVE PANEL\nPINCH THE HORIZONTAL HANDLE\nRELEASE TO PLACE", "PLACING PANEL\nFLIGHT IS PAUSED\nRELEASE TO FIX IN PLACE", "MENU", "EXIT", "PREVIOUS", "NEXT", "LOADING SCAN\nPLEASE WAIT\nMENU AND EXIT ARE AVAILABLE", "SCAN UNAVAILABLE\nPREVIOUS / NEXT OR EXIT\nMENU SHOWS THE ERROR"].map { try Self.label($0,device: device) }
     }
     private static func label(_ text: String, device: MTLDevice) throws -> MTLTexture {
         let width = 640, height = 180
@@ -113,7 +113,7 @@ final class FlightJoystickRenderer {
         pixels.withUnsafeBytes { texture.replace(region: MTLRegionMake2D(0,0,width,height), mipmapLevel: 0, withBytes: $0.baseAddress!, bytesPerRow: width * 4) }
         return texture
     }
-    func draw(flight: FlightController, pressedButtons: Set<FlightPanelAction> = [], eyePositions: [SIMD4<Float>], clipFromTracking: [simd_float4x4], viewports: [MTLViewport],
+    func draw(flight: FlightController, scanFailed: Bool = false, pressedButtons: Set<FlightPanelAction> = [], eyePositions: [SIMD4<Float>], clipFromTracking: [simd_float4x4], viewports: [MTLViewport],
               color: MTLTexture, depth: MTLTexture, rateMap: MTLRasterizationRateMap?, arrayLength: Int, command: MTLCommandBuffer) throws {
         var groups = [[Instance](),[Instance]()]
         let frame = flight.panelTransform
@@ -202,7 +202,7 @@ final class FlightJoystickRenderer {
                 var label = labelInstances[i]
                 encoder.setVertexBytes(&label,length: MemoryLayout<Instance>.stride,index: 2)
                 if textured {
-                    let labelIndex = i >= 2 ? i+2 : (i == 0 ? (!flight.canFly ? 8 : (flight.isHeld ? 1 : 0)) : (flight.isMovingPanel ? 3 : 2))
+                    let labelIndex = i >= 2 ? i+2 : (i == 0 ? (!flight.canFly ? (scanFailed ? 9 : 8) : (flight.isHeld ? 1 : 0)) : (flight.isMovingPanel ? 3 : 2))
                     encoder.setFragmentTexture(labels[labelIndex],index: 0)
                 }
                 encoder.drawPrimitives(type: .triangle,vertexStart: 0,vertexCount: 6)

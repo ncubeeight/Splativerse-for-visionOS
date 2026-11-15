@@ -265,7 +265,7 @@ final class VisionScanRenderer: @unchecked Sendable {
         let retiring = OSAllocatedUnfairLock(initialState: asset.withLock { value in let scan = value; value = nil; return scan })
         retiring.withLock { $0?.stop() }
         control.report(request.id) {
-            $0.ready = false; $0.failure = nil; $0.scanSwitchPending = false
+            $0.ready = false; $0.failure = nil; $0.loadFailure = nil; $0.scanSwitchPending = false
             $0.splatCount = 0; $0.visibleSplatCount = 0
             $0.message = "Releasing previous scan, then loading " + next.title + "…"
         }
@@ -281,7 +281,18 @@ final class VisionScanRenderer: @unchecked Sendable {
                     if control.shouldStop(request.id) { throw CancellationError() }
                     try await load(next)
                 } catch is CancellationError { }
-                catch { if !Task.isCancelled { fail(error) } }
+                catch {
+                    await releaseLoadingPair()
+                    await drainGPU()
+                    guard !Task.isCancelled, !control.shouldStop(request.id) else { return }
+                    let detail = "Could not load “" + next.fileURL.lastPathComponent + "”: " + error.localizedDescription
+                    Self.log.error("Recoverable scan load failure: \(detail,privacy: .public)")
+                    control.report(request.id) {
+                        $0.ready = false; $0.loadFailure = detail; $0.scanSwitchPending = false
+                        $0.splatCount = 0; $0.visibleSplatCount = 0
+                        $0.message = "Scan unavailable. Use Previous or Next to continue, or Menu for details."
+                    }
+                }
             }
         }
     }
@@ -544,13 +555,13 @@ final class VisionScanRenderer: @unchecked Sendable {
             lastFlightTime = time
             let flightActive = flightAvailable && flightEnabled && control.interactionActive()
             let navigation = control.snapshot()
-            var motion = flight.update(head: anchor.originFromAnchorTransform, hands: handTracker.latest(), deltaTime: dt, enabled: flightActive, flightAllowed: loaded != nil && !navigation.scanSwitchPending, canGoPrevious: navigation.canGoPrevious, canGoNext: navigation.canGoNext, panelButtonsEnabled: false)
+            var motion = flight.update(head: anchor.originFromAnchorTransform, hands: handTracker.latest(), deltaTime: dt, enabled: flightActive, flightAllowed: loaded != nil && !navigation.scanSwitchPending, canGoPrevious: navigation.canGoPrevious, canGoNext: navigation.canGoNext, panelButtonsEnabled: false, browsingAllowed: navigation.canBrowse)
             let events = panelEvents.withLock { queue in let events = queue; queue.removeAll(keepingCapacity: true); return events }
             let buttonsActive = flightActive && flight.hasPlacement && !flight.isMovingPanel
             if !buttonsActive { panelInput.reset() }
             for event in events {
                 if let action = panelInput.update(event,panel: flight.panelTransform,enabled: buttonsActive,
-                    canGoPrevious: flight.previousEnabled && navigation.ready,canGoNext: flight.nextEnabled && navigation.ready) {
+                    canGoPrevious: flight.previousEnabled && navigation.canBrowse,canGoNext: flight.nextEnabled && navigation.canBrowse) {
                     flight.reset(); motion = FlightMotion()
                     control.panelAction(action,for: request.id)
                     Self.log.info("Panel spatial selection: \(String(describing: action),privacy: .public)")
@@ -563,7 +574,7 @@ final class VisionScanRenderer: @unchecked Sendable {
                 control.report(request.id) {
                     $0.flightHeld = held
                     $0.flightMovingPanel = moving
-                    $0.flightMessage = !enabled ? "Flight panel hidden." : moving ? "Placing panel · release the handle to fix its position." : held ? "Flying toward your view · release to stop." : "Pinch the stick to fly. Use the horizontal handle to place the panel."
+                    $0.flightMessage = !enabled ? "Flight panel hidden." : navigation.loadFailure != nil ? "This scan could not load. Use Previous or Next to continue, or Menu for details." : moving ? "Placing panel · release the handle to fix its position." : held ? "Flying toward your view · release to stop." : "Pinch the stick to fly. Use the horizontal handle to place the panel."
                 }
             }
             if let loaded {
@@ -651,7 +662,7 @@ final class VisionScanRenderer: @unchecked Sendable {
                         drawable.computeProjection(viewIndex: index) * (anchor.originFromAnchorTransform * drawable.views[index].transform).inverse
                     }
                     do {
-                        try joystick.draw(flight: flight, pressedButtons: panelInput.pressed, eyePositions: indices.map { (anchor.originFromAnchorTransform * drawable.views[$0].transform).columns.3 }, clipFromTracking: clips,
+                        try joystick.draw(flight: flight, scanFailed: control.snapshot().loadFailure != nil, pressedButtons: panelInput.pressed, eyePositions: indices.map { (anchor.originFromAnchorTransform * drawable.views[$0].transform).columns.3 }, clipFromTracking: clips,
                             viewports: indices.map { drawable.views[$0].textureMap.viewport }, color: color, depth: depth,
                             rateMap: rateMap, arrayLength: arrayLength, command: command)
                     } catch {

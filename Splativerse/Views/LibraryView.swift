@@ -54,12 +54,12 @@ struct LibraryView: View {
                         } label: {
                             Label("Hide Menu",systemImage: "rectangle.slash").font(.title2.bold()).frame(maxWidth: .infinity).padding(.vertical,12)
                         }.buttonStyle(.borderedProminent).controlSize(.extraLarge)
-                        .disabled(!model.renderStatus.ready || !model.renderStatus.flightAvailable || !model.renderStatus.flightEnabled)
+                        .disabled((!model.renderStatus.ready && model.renderStatus.loadFailure == nil) || !model.renderStatus.flightAvailable || !model.renderStatus.flightEnabled)
                         Text("Look at a gold button and pinch to select: Menu toggles settings, Exit leaves, and Previous/Next browse scans in filename order.").font(.caption)
                     }
                     if let failure = model.lastLoadFailure {
                         VStack(alignment: .leading,spacing: 8) {
-                            Label("Scan could not stay open",systemImage: "exclamationmark.triangle").font(.headline)
+                            Label("Scan loading issue",systemImage: "exclamationmark.triangle").font(.headline)
                             Text(failure).textSelection(.enabled)
                             Button("Dismiss message") { model.lastLoadFailure = nil }
                         }.padding().background(.thinMaterial,in: RoundedRectangle(cornerRadius: 12))
@@ -84,7 +84,7 @@ struct LibraryView: View {
                         Button("Import scans…") { pickingFiles = true }.buttonStyle(.borderedProminent)
                             .disabled(model.busy || !model.prepared)
                     }
-                    if model.busy || model.opening || (model.isImmersive && !model.renderStatus.ready) {
+                    if model.busy || model.opening || (model.isImmersive && !model.renderStatus.ready && model.renderStatus.loadFailure == nil) {
                         ProgressView(model.isImmersive ? model.renderStatus.message : model.message)
                     } else {
                         Text(model.isImmersive ? model.renderStatus.message : model.message)

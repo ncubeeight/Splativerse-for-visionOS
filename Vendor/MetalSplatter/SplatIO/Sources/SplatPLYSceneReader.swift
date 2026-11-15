@@ -253,7 +253,9 @@ private extension PLYHeader.Element {
     func index(forOptionalPropertyNamed names: [String], type: PLYHeader.PrimitivePropertyType) throws -> Int? {
         for name in names {
             if let index = index(forPropertyNamed: name) {
-                guard case .primitive(type) = properties[index].type else { throw SplatPLYSceneReader.Error.unsupportedFileContents("Unexpected type for property \"\(name)\"") }
+                guard case .primitive(type) = properties[index].type else {
+                    throw SplatPLYSceneReader.Error.unsupportedFileContents("Property \"\(name)\" is declared as \(properties[index].type); this Gaussian-splat reader expects \(type). Export a Gaussian-splat PLY with the supported property types.")
+                }
                 return index
             }
         }

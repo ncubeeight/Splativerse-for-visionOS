@@ -315,3 +315,53 @@ simulator app signature verification PASSED. Source ZIP verified.
 Hardware still required: runtime pipeline creation/stereo appearance, actual
 gaze/pinch event delivery and ergonomics, and loading the selected scan on the
 headset. Host routing tests confirm which file is queued, not GPU rendering.
+
+Recoverable scan-loading failures — 2026-11-15
+The closest source error to the reported “unexpected x value” is the PLY
+reader's property-type rejection. A synthetic PLY with double x reproduces
+that path; no user scan or headset log was available to establish the exact
+reported failure. Error text now names the property, declared/expected types,
+and the app includes the failed filename. The reader remains strict.
+
+Loader errors now drain partial renderer/GPU resources, keep immersion open,
+show Scan unavailable on the panel, open menu error details, and permit
+Previous/Next at valid endpoints. Flight is disabled until a scan loads.
+The menu spinner stops on failure. Fatal GPU/session errors retain the
+existing dismissal path. No source scan is modified or silently skipped.
+
+Validation: 53 core tests passed; 32 I/O tests passed; 5 CPU rendering tests
+passed and 3 GPU tests skipped (no accessible device). A host integration
+check verified that a simulated load failure keeps the session active and
+queues the correct adjacent file, clears the old error, and preserves natural
+filename ordering. Signed simulator and unsigned visionOS device Release
+builds passed. Strict signature and source ZIP checks passed. Actual headset
+error recovery and the user's affected file still require verification.
+
+TestFlight preparation — 2026-11-15
+Added three-layer AppIcon.solidimagestack with 1024 px layers, app privacy
+manifest, bundled third-party license notices, and export-compliance metadata.
+Info.plist version/build now use build settings (1.0 / 1). Existing bundle ID
+and team preserved. Removed unused world-sensing usage description; ARKit
+head/world tracking does not request that permission. Hand tracking usage
+text and runtime authorization remain present.
+
+Signed Release archive succeeded using the configured Apple Development
+identity and team 9Q3FCK2997. Strict signature check and matching app/dSYM UUIDs
+passed. Compiled CFBundleIcons.CFBundlePrimaryIcon is AppIcon; Assets.car,
+PrivacyInfo.xcprivacy and ThirdPartyNotices.txt are present. Flight shader
+compiled and linked successfully for xros and xrsimulator.
+
+IPA export attempted using method app-store-connect and destination export.
+BLOCKED: exporter cannot load Xcode account credentials (missing Xcode-Username)
+and cannot find App Store provisioning profiles for com.splativerse.vision.
+No App Store-signed IPA or upload is claimed. The verified archive, export
+options, beta notes, demo files and instructions are packaged for Organizer.
+
+Supplied logo integration — 2026-11-15
+Replaced the temporary S icon with the supplied SplativerseLogo.jpg,
+preserved byte-for-byte under Distribution/Branding. The icon back layer
+is a 1024 px resampling; upper layers are transparent to preserve the
+flattened artwork. Checked the circular crop and the archived ProductIcon.
+Rebuilt signed Release archive 1.0 (1): passed. Strict code-signature check
+and app/dSYM UUID match passed. Compiled asset catalog and AppIcon metadata
+verified. No app logic changed; App Store export/upload not retried.

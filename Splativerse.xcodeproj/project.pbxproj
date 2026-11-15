@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        F115B0010000000000000006 /* ThirdPartyNotices.txt in Resources */ = {isa = PBXBuildFile; fileRef = F115B0010000000000000007 /* ThirdPartyNotices.txt */; };
+        F115B0010000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F115B0010000000000000002 /* Assets.xcassets */; };
+        F115B0010000000000000003 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F115B0010000000000000004 /* PrivacyInfo.xcprivacy */; };
 		244A7309D63796225C6E5D36 /* SplativerseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C382CCAECEF9946DAB08AEB8 /* SplativerseCore */; };
 		5F46E6C60D5D96B856BD93ED /* SplatIO in Frameworks */ = {isa = PBXBuildFile; productRef = D3190AFD02DF292F9CCFAB39 /* SplatIO */; };
 		7D4B05B9A259556E48129562 /* RenderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B6D3FB10719213D4E55B3E /* RenderControl.swift */; };
@@ -20,6 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+        F115B0010000000000000007 /* ThirdPartyNotices.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ThirdPartyNotices.txt; sourceTree = "<group>"; };
+        F115B0010000000000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+        F115B0010000000000000004 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		130E2F48B5C09BF9DBD586E4 /* Splativerse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Splativerse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEB9C499E131E490CE4BC99 /* SplativerseCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SplativerseCore; path = Packages/SplativerseCore; sourceTree = SOURCE_ROOT; };
 		94B6D3FB10719213D4E55B3E /* RenderControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderControl.swift; sourceTree = "<group>"; };
@@ -94,6 +100,9 @@
 			isa = PBXGroup;
 			children = (
 				9A0698F7041BA6F07966CB91 /* Info.plist */,
+                F115B0010000000000000002 /* Assets.xcassets */,
+                F115B0010000000000000004 /* PrivacyInfo.xcprivacy */,
+                F115B0010000000000000007 /* ThirdPartyNotices.txt */,
 				AF1DA5361BC4CC344491EF25 /* App */,
 				FC778DB2D3283BB44CFFE5D4 /* Rendering */,
 				620B7C0E65670ACB6FD8A7A2 /* Views */,
@@ -120,6 +129,7 @@
 			buildConfigurationList = F4C33150EC278594FFEC7EF6 /* Build configuration list for PBXNativeTarget "Splativerse" */;
 			buildPhases = (
 				E09CB02509076383AB9B39ED /* Sources */,
+                F115B0010000000000000005 /* Resources */,
 				EBB16A900D13C5791B854F5E /* Frameworks */,
 			);
 			buildRules = (
@@ -172,6 +182,19 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+        F115B0010000000000000005 /* Resources */ = {
+            isa = PBXResourcesBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+                F115B0010000000000000001 /* Assets.xcassets in Resources */,
+                F115B0010000000000000003 /* PrivacyInfo.xcprivacy in Resources */,
+                F115B0010000000000000006 /* ThirdPartyNotices.txt in Resources */,
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E09CB02509076383AB9B39ED /* Sources */ = {

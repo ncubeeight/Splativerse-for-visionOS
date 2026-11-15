@@ -53,4 +53,42 @@ final class SplativerseStreamingTests: XCTestCase {
             } catch { /* expected */ }
         }
     }
+    func testUnsupportedXPropertyReportsActualAndExpectedTypes() async throws {
+        let fixture = """
+        ply
+        format ascii 1.0
+        element vertex 1
+        property double x
+        property float y
+        property float z
+        property float f_dc_0
+        property float f_dc_1
+        property float f_dc_2
+        property float scale_0
+        property float scale_1
+        property float scale_2
+        property float opacity
+        property float rot_0
+        property float rot_1
+        property float rot_2
+        property float rot_3
+        end_header
+        0 0 0 0 0 0 -3 -3 -3 2 1 0 0 0
+        """ + "\n"
+        do {
+            _ = try await SplatPLYSceneReader(Data(fixture.utf8)).readAll()
+            XCTFail("Unsupported coordinate storage must be reported, not misread")
+        } catch {
+            let message = error.localizedDescription
+            XCTAssertTrue(message.contains("\"x\""),message)
+            XCTAssertTrue(message.contains("double"),message)
+            XCTAssertTrue(message.contains("expects float"),message)
+        }
+        // A bad scan must not poison the next reader in a browsing session.
+        let supported = fixture.replacingOccurrences(of: "property double x",with: "property float x")
+        let points = try await SplatPLYSceneReader(Data(supported.utf8)).readAll()
+        XCTAssertEqual(points.count,1)
+        XCTAssertEqual(points[0].position,.zero)
+    }
+
 }

@@ -1,0 +1,45 @@
+SPLATIVERSE — BETA INFORMATION
+
+Suggested beta description
+Explore Gaussian-splat scans as full-scale spaces on Apple Vision Pro.
+Import supported PLY, SPZ, and SPLAT files from Files, walk inside scans,
+and use the adjustable flight panel to move through them. Choose a live
+rendering radius from 60 to 360 metres and browse scans without leaving
+immersion.
+
+What to test
+- Choose a Downloads folder, open the folder, and select Open at top right.
+- Import supported PLY/SPZ scans; try both included demo files first.
+- Confirm scene scale and estimated starting position.
+- Allow hand tracking. Pinch the silver stick to fly; release to stop.
+- Reposition the panel using its brass handle, then release to anchor it.
+- Look at gold Menu, Exit, Previous, and Next buttons, then pinch/release
+  near your body. Verify filename order and disabled endpoints.
+- Try 60, 120, 180, 240, 300, and 360 m live-detail radii.
+- Try a malformed or unsupported scan. Confirm the error names the file,
+  immersion stays open, and Previous/Next can continue to a valid scan.
+- Report rendering artifacts, loading failures, frame rate, and comfort.
+
+Beta review notes
+No account or sign-in is required. The app requires a physical Apple Vision
+Pro running visionOS 26.0 or later for immersive rendering and hand tracking.
+Hand tracking controls the virtual joystick and panel placement; users grant
+permission when requested. Standard navigation buttons remain available
+without hand tracking. Hand poses are processed locally and are not uploaded.
+
+On first run, select Set up later if a Downloads folder is not needed.
+Use Files > Import scans to import a supported Gaussian-splat file, then
+Enter this space. Sample files Splativerse-Demo.ply and Splativerse-Demo.spz
+are included in the handoff's Samples folder. Provide these files to testers
+or attach/provide an accessible link for Beta App Review; the private GitHub
+repository is not accessible to reviewers by default.
+
+Large scans can exceed device memory. Smooth flight supports translation
+and yaw; it does not add artificial pitch or roll. Supported Gaussian PLY
+attributes must use the reader's expected types. Ordinary mesh/point-cloud
+PLY files are not Gaussian-splat scans.
+
+Account-owner fields to complete in App Store Connect
+- Beta feedback email and review contact details.
+- Any required app privacy, export-compliance, and review information.
+- Tester groups. External testing may require Beta App Review.

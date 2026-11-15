@@ -41,3 +41,5 @@ failure to prepare(), check stop requests during spatial traversal and index
 writes, and provide stop-and-wait cleanup so replacement scans wait for sorter
 workers to release their references. The CPU sort itself finishes before its
 worker can drain.
+
+2026-11-15: SplatPLYSceneReader type-mismatch errors now include the declared and expected property types. A regression verifies the unsupported x-coordinate error and successful reading of a subsequent valid file. Supported file types/conversion behavior are unchanged.

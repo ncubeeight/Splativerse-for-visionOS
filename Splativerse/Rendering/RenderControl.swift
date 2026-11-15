@@ -44,6 +44,9 @@ struct RenderStatus: Sendable {
     var ready = false
     var closed = false
     var failure: String?
+    // File/decode/allocation failures can be retried without closing immersion.
+    var loadFailure: String?
+    var canBrowse: Bool { (ready || loadFailure != nil) && !scanSwitchPending && !closed && failure == nil }
 }
 
 /// The SwiftUI actor and render thread exchange only snapshots and queued commands.
@@ -95,7 +98,7 @@ final class RenderControl: Sendable {
             case .menu: state.status.menuSequence &+= 1
             case .exit: state.status.exitRequested = true; state.stop = true
             case .previous, .next:
-                guard state.status.ready, !state.status.scanSwitchPending,
+                guard state.status.canBrowse,
                       action == .previous ? state.status.canGoPrevious : state.status.canGoNext else { return }
                 state.status.scanStep = action == .previous ? -1 : 1
                 state.status.scanStepSequence &+= 1; state.status.scanSwitchPending = true

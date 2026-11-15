@@ -301,4 +301,16 @@ final class FlightControllerTests: XCTestCase {
         XCTAssertTrue(c.isMovingPanel); XCTAssertFalse(c.isHeld)
     }
 
+    func testFailedScanCanBrowseWithoutEnablingFlight() {
+        var c = FlightController(); c.bringPanelHere(head: head)
+        let p = point(c,local: FlightController.buttonCenter(.previous))
+        for pinch: Float in [0.07,0.015] {
+            _ = c.update(head: head,hands: [hand(p,pinch: pinch)],deltaTime: dt,enabled: true,
+                         flightAllowed: false,canGoPrevious: true,canGoNext: false,browsingAllowed: true)
+        }
+        XCTAssertFalse(c.canFly); XCTAssertFalse(c.isHeld)
+        XCTAssertTrue(c.previousEnabled); XCTAssertFalse(c.nextEnabled)
+        XCTAssertEqual(c.panelAction,.previous)
+    }
+
 }
