@@ -1,0 +1,317 @@
+Splativerse validation — 2026-11-14
+
+Release build, generic visionOS device, code signing disabled: PASSED
+Toolchain: Xcode 27.2 / Swift 6.4.2 / visionOS SDK 27.2
+Deployment target: visionOS 26.0
+
+SplativerseCore: 6 tests passed (storage, persistence, duplicates, recursive import, transforms).
+Upstream PLYIO and SplatIO: 28 tests passed.
+Splativerse reader regressions: 3 tests passed (slow PLY/SPZ consumers, truncated PLY).
+Demo PLY → SPZ → readback: 24,841 Gaussian splats preserved.
+Bundled Metal shader resources verified in the built device app.
+
+Host tests use a local adapter for File Provider coordination and scoped bookmarks.
+Not verified: actual Files picker/bookmark permissions on visionOS; runtime GPU
+shader compilation; stereo rendering or ARKit tracking on a headset; frame rate,
+thermal behavior, development-team device signing, or headset installation. No Vision Pro was attached for validation.
+
+Source dependencies and shader sources are vendored and pinned. See
+THIRD_PARTY_NOTICES.md. The .app used for validation is unsigned; use the Xcode
+project and your development team to install on your headset.
+
+Rename verification — 2026-11-14
+Splativerse unsigned Release build: PASSED.
+Renamed SplativerseCore test suite: 6 tests passed.
+Built display name: Splativerse; bundle ID: com.splativerse.vision.
+No previous-brand references remain in app/project filenames or file content.
+
+Resource-bundle signing repair — 2026-11-14
+Reproduced codesign failure with root Resources directory; renaming it to
+ShaderSources fixed signing. Updated manifest and runtime shader lookup.
+Fresh Release visionOS Simulator build with ad-hoc signing enabled: PASSED.
+App and renderer resource bundle strict signature verification: PASSED.
+All five packaged shader files match source bytes; no root Resources directory.
+Physical-device build still requires selecting a development team in Xcode.
+Clean Build Folder in existing Xcode builds to remove the old resource layout.
+
+Downloads selection guidance — 2026-11-14
+First-run setup explains entering Downloads and selecting Open at upper right.
+Files menu folder selection presents the same guidance before the system picker.
+Release visionOS Simulator build with ad-hoc signing enabled: PASSED.
+Updated guidance and picker transition have not been exercised on a headset.
+
+Import memory repair — 2026-11-14
+Headset jetsam report at 12:24:35 PM PST lists Splativerse as largestProcess,
+PID 616, rpages 327708, pageSize 16384 (5,369,167,872 bytes, about 5 GiB).
+This report does not explicitly mark Splativerse as killed: its sole reason
+entry is for promotedcontentd, per-process-limit. It does not prove the cause
+of Splativerse's closure, but establishes excessive memory use during import.
+
+Reproduced original SHA-256 FileHandle loop with a 512 MiB sparse file on macOS:
+original peak resident bytes 370360320; per-chunk autorelease pool 8126464.
+Both produced SHA-256:
+9acca8e8c22201155389f65abbf6bc9723edc7384ead80503839f49dcc56d767
+Source now drains temporary Foundation buffers after each 1 MiB hash chunk.
+Signed Release visionOS Simulator build: PASSED.
+Headset retry with this repair is still required; runtime closure not yet
+confirmed resolved. Existing user scans and folder selection are unchanged.
+Core library/navigation tests, including multi-chunk digest/deduplication: 7 passed.
+App strict signature verification: PASSED.
+
+30 metre rendering bubble — 2026-11-14
+Live Gaussian geometry: 30 m head-centred radius, with opacity fade at 25–30 m.
+Distance is converted to source units; physical movement and navigation steps
+move the region. Both eyes share one head-centred distance sort position.
+Distant panorama: six 1024-square faces, captured from geometry beyond 25 m.
+Initial capture before presentation; background refresh after 5 m of travel or
+manual refresh. Capture uses a separate command queue, one face at a time.
+Completed cube images are published atomically; incomplete captures stay hidden.
+Shared splat buffers remain resident; this is not disk streaming or downsampling.
+
+Sorting rejects distant spatial blocks and individual centres before sorting,
+then uploads only the retained subset. Head turns do not trigger distance sorts.
+Sorting is deferred during load and stopped when leaving the space.
+
+Validation: Release visionOS device compile (unsigned) PASSED; signed Release
+visionOS Simulator build PASSED. PLY/SplatIO regressions: 31 passed.
+Five new CPU checks passed: spherical boundaries, metres/cm/mm conversion,
+conservative spatial rejection, cube direction/seam alignment, shader ABI layout.
+Two new GPU checks (moving/empty sorting regions and six-face pixel capture)
+SKIPPED because this execution environment has no accessible Metal device.
+No on-headset frame-rate measurement or visual verification of this feature
+has been performed. Test stereo, foveation, seams, refresh, and exit/cancellation
+on Vision Pro. Static background loses binocular parallax and may shift or
+ghost around the overlap during movement. Dense local scenes can still lag.
+Final signed simulator app passed strict signature verification; all bundled
+shader files match the updated sources. Source ZIP refreshed.
+
+Adjustable radius and density-based entry — 2026-11-14
+Live detail radius: 5–60 m, 1 m slider increments, presets 5/10/20/30/60 m.
+Persisted per scan; older catalogs default to 30 m. Available before entry and
+while viewing. New near/far renderers share immutable splat buffers; each radius
+change completes its panorama and initial near sort before atomic publication.
+The overlap/refresh distance is min(5 m, radius/5). A memory-budget failure keeps
+the existing view and advises leaving/re-entering with the saved radius.
+
+Entry uses at most 65,536 position samples, rejects nearly transparent splats,
+and finds the densest 4 m grid neighborhood including adjacent cells. A local
+5th-percentile height estimates the floor; eye height is 1.65 m. A nearby opening
+is preferred when the center appears occupied, with heading toward the center.
+Return to start restores this estimate. Original camera poses are not recovered;
+this heuristic does not guarantee free space or provide collision detection.
+
+Core tests: 15 PASSED, including 8 new radius/spawn tests and existing storage/
+navigation regressions. Release visionOS Simulator build with ad-hoc signing
+and strict app signature verification: PASSED. Release generic visionOS build
+(unsigned): PASSED. Runtime radius swaps, cancellation during GPU capture,
+spawn quality on real scans, and frame-rate improvements require headset testing.
+The host has no accessible Metal GPU; no new runtime GPU result is claimed.
+
+Pinch-to-fly joystick — 2026-11-14
+Added ARKit hand tracking with NSHandsTrackingUsageDescription and visible
+upper limbs. Permission denial/provider failure falls back to existing buttons.
+A stereo Metal joystick appears 48 cm ahead and 18 cm below the head; the
+handle turns green while held and the label changes to RELEASE TO STOP.
+A silhouette-only depth pass prevents nearby scan geometry hiding the control
+while restoring its real physical depth and preserving scene depth elsewhere.
+Core Graphics bitmap row direction was checked on the host; label UVs flip Y.
+
+Either hand may start a fresh pinch within 8 cm of the handle. Grab position
+is neutral; displacement controls forward/back and vertical velocity, and
+wrist twist around the forward axis controls yaw. Maximum rates: 2 m/s forward
+or backward, 1 m/s vertically, 45 degrees/s turning. Dead zones: 1.5 cm and
+4 degrees. Full input: 15 cm and 25 degrees. Input smoothing: 60 ms; neutral
+and release have no velocity tail. Flight does not alter physical head tracking.
+
+Release, invalid/lost/stale tracking, app/compositor pause, disable, manual
+navigation, or excessive 45 cm hand travel reset the grip. Hand samples expire
+after 150 ms. Long frame stalls release the grip; simulation dt is capped to
+1/30 s. A fresh open-to-pinch gesture is required after interruption.
+
+Core tests: 27 PASSED, including 12 new flight tests for engagement, directions,
+speed bounds, neutral/release, ownership, hysteresis, tracking loss, pause,
+invalid samples, head turns, virtual transforms, and refresh-rate independence.
+Release generic visionOS build (unsigned): PASSED. Signed Release visionOS
+Simulator build: PASSED. Strict simulator app signature verification: PASSED.
+App plist and Xcode project syntax validated; signing-team settings preserved.
+
+Limitations: host cannot access a Metal GPU; separate offline Metal Toolchain
+is not installed, so runtime shader compilation and stereo joystick rendering
+are NOT verified. Hand authorization, actual gestures, wrist-tilt ergonomics,
+physical-hand occlusion, provider interruptions, and headset performance need
+hardware validation. See README acceptance checks before distributing.
+
+Dual short-reach metallic flight panel — 2026-11-14
+Replaces the single bulb-shaped handle with two closed, opaque metallic lever
+meshes and a solid chamfered panel. Left: ribbed silver grip. Right: brass grip
+with wider silver cap. Gimbal, shaft and grip tilt as one rigid assembly about
+each panel pivot. Per-eye view-dependent highlights use a simulated sky/light
+environment, not actual scan reflections. Four panel labels show idle/held
+function text and base indicators turn green while held.
+
+Neutral grips: 28 cm ahead, 29 cm below eye level, 26 cm apart. Panel follows
+a level yaw frame while idle and freezes while either stick remains held.
+Left-hand/left-stick input: forward/back and left/right strafe. Right-hand/
+right-stick input: left/right yaw, forward up, backward down. No artificial
+pitch or roll. Both inputs may run simultaneously, with independent release.
+Full input at 6.5 cm travel, 1 cm dead zone; max 2 m/s horizontal (diagonal
+bounded), 1 m/s vertical, 45 degrees/s yaw. Wrist tilt and vertical hand motion
+are ignored. A lost/invalid hand or >30 cm reach releases that stick; global
+pause/head loss/manual navigation/disable resets both. Existing stale-sample
+timeout and fresh-pinch engagement guards remain.
+
+Validation: 30 core tests PASSED, including 15 dual-flight checks covering
+short reach, hand ownership, all mappings, simultaneous use, independent
+release, neutral, missing/invalid input, pause, hysteresis, frozen panel, rigid
+lever tilt, no camera pitch/roll, frame-rate independence and physical movement.
+Signed Release visionOS Simulator build: PASSED. Strict signature verification:
+PASSED. Release generic visionOS device build (unsigned): PASSED.
+
+No accessible Metal GPU or separate Metal compiler is available in this host.
+Runtime shader compilation, actual stereo appearance, material highlights,
+hand tracking at the closer placement, and ergonomic comfort are NOT verified.
+Complete the updated README headset acceptance checks before distribution.
+Source project and source ZIP updated.
+
+Single joystick with fixed adjustable placement — 2026-11-14
+Replaces the dual sticks with one metallic flight lever and a distinct brass
+horizontal placement handle. Either hand may pinch either control; gestures
+are exclusive. Flight: forward/back velocity follows the current headset gaze
+vector, including its vertical component; lateral deflection adds gradual yaw.
+No virtual pitch or roll is added. Limits remain 2 m/s and 45 degrees/s.
+
+Panel initializes once per immersive session and stays fixed in tracking space
+through idle head turns, release, pauses, tracking interruptions and navigation.
+A fresh pinch near the carry rail translates it; release fixes its position.
+Placement never produces flight, and resuming flight needs a fresh pinch.
+Missing/invalid or >20 cm per-frame hand jumps stop placement at its last valid
+pose. Window controls nudge height/distance by 5 cm; Bring panel here restores
+a level placement in front of the current head and makes the panel visible.
+Nudges bound reach to 18–85 cm and panel height to 15–85 cm below the eyes.
+Direct dragging is not restricted to these nudge bounds. No cross-session world
+anchor persistence is claimed. Initial grip remains 28 cm ahead / 29 cm below.
+
+Validation: 33 core tests PASSED, including 18 flight/placement checks for live
+gaze-directed motion, independent head movement, no artificial pitch/roll,
+either hand, smooth yaw, fresh pinch, release/neutral, fixed idle placement,
+exclusive dragging, lost/jumping input, pause, seated recovery, nudge bounds,
+rigid lever return, and frame-rate-independent camera motion.
+Signed Release visionOS Simulator build and strict signature check: PASSED.
+Unsigned Release generic visionOS device build: PASSED.
+Runtime shaders, stereo panel appearance, physical grasp ergonomics, headset
+tracking interruptions and actual placement comfort remain unverified here.
+No accessible Metal GPU or separate offline Metal compiler is available.
+Source project, README and source ZIP updated.
+
+60–300 m radius, Menu/Exit, and artifact hardening — 2026-11-14
+Radius range/default: 60–300 m / 60 m. Presets and slider steps: 60,120,180,
+240,300 m. Old stored 5–59 m values migrate to 60 m without losing scan scale,
+orientation, or floor. Outer fade and background refresh travel remain 5 m.
+
+Gold panel Menu and Exit buttons accept a fresh pinch with either hand and
+stop flight before dispatch. The library has a prominent Hide Menu button;
+scene monitoring now resides in CompositorContent and survives window closure.
+Menu reopens the window. Exit reopens it if needed and dismisses immersion.
+Manual Leave and panel Exit share a dismissal guard. The immersive scene, not
+the menu window, controls interaction pause/resume. Full immersion remains
+selected, using visionOS's hiding/restoration of other apps' windows.
+
+Shader changes address potential numerical sources of black blocks: full-float
+projected axes/deltas; stable nonnegative covariance eigenvalues; finite-value
+rejection; SDR color and alpha clamps; fragment discard before blending/depth
+for transparent corners and invalid colors. Packed-covariance overflow is
+culled and may leave missing geometry. The user's specific artifacts have NOT
+been reproduced or confirmed fixed here.
+
+Validation: 36 core tests PASSED, including legacy-radius migration and Menu/
+Exit engagement, one-shot actions, and stopping flight before Exit. PLY/SplatIO:
+31 PASSED. Rendering CPU checks: 5 PASSED. Three GPU checks SKIPPED (no Metal
+device), including a new large projected splat/invalid covariance pixel test.
+Signed Release simulator build and strict app signature verification: PASSED.
+Unsigned Release generic visionOS device build: PASSED. Updated packaged
+shader source files verified byte-for-byte. Source ZIP integrity verified.
+
+Unverified on hardware: runtime shader compilation, black-box resolution,
+Menu/Exit window transitions while the library is hidden, full-space restoration
+of other apps, gesture ergonomics, and large-radius performance. Full immersion
+behavior is documented by Apple, not a newly implemented cross-app window API.
+
+Radial panel, 420 m radius, scan browsing, and loading recovery — 2026-11-14
+Current panel: one joystick; compact flush Menu above Exit on the left,
+Previous above Next on the right. Unavailable scan directions are dimmed.
+Fresh pinch required; no wrapping; natural library filename order relative
+to the rendered scan. Same compositor/AR session across scan changes, panel
+placement retained, each scan uses its own settings and estimated spawn.
+During loading: blue backdrop, loading label, flight/browsing paused, Menu,
+Exit, and panel placement remain usable. Drag rotates panel toward headset
+while preserving the local grasp point; release fixes the pose. Rail lowered.
+Menu toggles the settings window. Radius presets now include 360 and 420 m.
+
+Loading reliability: session-scoped stop, serialized session cleanup, explicit
+sorter/background/GPU drain, outgoing scan reference released before the next
+load, allocation errors surfaced, persistent failure/last-stage card, Metal
+allocation logs. Corrected dismissal state reset. No recent headset crash
+report was accessible; no confirmed memory-cache or hardware diagnosis.
+
+Validation: 44 core tests PASSED. Additional standalone RenderControl checks
+cover stale-session stop/load rejection, endpoint gating, repeated presses,
+accepted switches during tracking interruption, and Menu/Exit while loading.
+Vendor suites: 31 I/O and 5 CPU rendering checks passed; 3 GPU checks skipped
+because no Metal device is accessible. Release simulator and unsigned device
+builds passed; simulator signing verified. Runtime shader compilation, headset
+window transitions, gesture comfort, repeated large-scan memory behavior, and
+actual Previous/Next rendering remain hardware acceptance checks.
+
+Flight-panel availability correction and six radius options — 2026-11-14
+Fixed the button-label fragment shader's mixed half4/float4 arithmetic and
+implicit return conversion by keeping the sampled color and tint half4.
+This is a likely source of panel startup failure introduced with dimmed
+Previous/Next labels; no headset error log was available to confirm it.
+Startup errors now identify panel graphics vs. hand-tracking initialization
+and include the original error in selectable menu text and ScanLifecycle logs.
+Drawing/allocation errors also include their actual reason.
+
+Removed 420 m from presets and slider; current range is 60–360 m, with six
+presets. Previously saved 420 m values decode and clamp to 360 m without
+losing orientation, units, or floor settings.
+
+44 core tests passed, including legacy 420 m migration. Signed Release
+simulator and unsigned Release device builds passed; strict signature check
+passed. Added Scripts/check-flight-shader.py to compile the embedded shader
+independently. That check is BLOCKED here by the missing Metal Toolchain;
+Swift/Xcode app builds do not validate this runtime-compiled shader. Actual
+panel recovery and layout remain to be checked on Vision Pro.
+
+Metal validation, raised panel buttons, printed instructions, and spatial input — 2026-11-14
+Xcode Components confirms Metal Toolchain 27.2 is ALREADY INSTALLED (27B47).
+The command-line wrapper cannot query the component service in this restricted
+environment. The mounted official compiler is Apple Metal 32023.922
+(metalfe-32023.922.4). No redundant installation or deletion was performed.
+The previous half4 * float4 expression reproduces the exact vector conversion
+compiler error. The corrected shader, including the new transparent text,
+compiled with warnings-as-errors and linked successfully for both
+visionOS 26 device and simulator via Scripts/check-flight-shader.py.
+
+Gold Menu/Exit/Previous/Next controls are now 1 cm above the face; their
+input targets move with them. Panel instructions use black ink on transparent
+textures, premultiplied blending, transparent-fragment discard, and a 0.2 mm
+surface offset over the metallic face, with no dark screen rectangles.
+
+Compositor LayerRenderer.onSpatialEvent is now connected. System selection
+rays target look-and-pinch buttons from a comfortable hand position; direct
+surface events use the same input state machine. Buttons highlight on press,
+activate once on release, cancel on drag-off/system cancellation, and respect
+loading, endpoints, hidden-panel state, and interaction pause. Button actions
+use this single system event route; ARKit remains responsible for grasping the
+joystick and positioning the panel, avoiding duplicate button actions.
+
+Validation: 52 core tests PASSED (8 new spatial input tests). Actual AppModel +
+RenderControl + ScanLibrary temporary-folder checks PASSED for natural numeric
+filename ordering, forward/back traversal, endpoints, same-session load
+commands, selected scan updates, and independence from highlighted menu rows.
+Signed Release simulator and unsigned Release device builds PASSED. Strict
+simulator app signature verification PASSED. Source ZIP verified.
+
+Hardware still required: runtime pipeline creation/stereo appearance, actual
+gaze/pinch event delivery and ergonomics, and loading the selected scan on the
+headset. Host routing tests confirm which file is queued, not GPU rendering.

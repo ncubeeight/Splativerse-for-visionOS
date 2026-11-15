@@ -1,0 +1,419 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		244A7309D63796225C6E5D36 /* SplativerseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C382CCAECEF9946DAB08AEB8 /* SplativerseCore */; };
+		5F46E6C60D5D96B856BD93ED /* SplatIO in Frameworks */ = {isa = PBXBuildFile; productRef = D3190AFD02DF292F9CCFAB39 /* SplatIO */; };
+		7D4B05B9A259556E48129562 /* RenderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B6D3FB10719213D4E55B3E /* RenderControl.swift */; };
+		9E935FB44BE3AF98ADD3BF44 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B033F393F17427BD6EA82E28 /* AppModel.swift */; };
+		A03285E3568F96B62221C7D7 /* SplativerseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE556E6E3AF706A173C8D355 /* SplativerseApp.swift */; };
+		B4D89F2D3B8836EB280FC221 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E618504946C90255488AB5 /* LibraryView.swift */; };
+		BCFCBF9FF629BD54CA8E35A5 /* MetalSplatter in Frameworks */ = {isa = PBXBuildFile; productRef = E380ADC9302D685ABB135537 /* MetalSplatter */; };
+		BDED04E914A4CE4C480D5F42 /* VisionScanRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D562445AE96844A205509A67 /* VisionScanRenderer.swift */; };
+		F119A1100000000000000002 /* FlightHandTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F119A1100000000000000001 /* FlightHandTracker.swift */; };
+		F119A1100000000000000012 /* FlightJoystickRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F119A1100000000000000011 /* FlightJoystickRenderer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		130E2F48B5C09BF9DBD586E4 /* Splativerse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Splativerse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AEB9C499E131E490CE4BC99 /* SplativerseCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SplativerseCore; path = Packages/SplativerseCore; sourceTree = SOURCE_ROOT; };
+		94B6D3FB10719213D4E55B3E /* RenderControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderControl.swift; sourceTree = "<group>"; };
+		9A0698F7041BA6F07966CB91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B033F393F17427BD6EA82E28 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		D562445AE96844A205509A67 /* VisionScanRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionScanRenderer.swift; sourceTree = "<group>"; };
+		E0E618504946C90255488AB5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		F766D2D806CB28B5B380BF8D /* MetalSplatter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalSplatter; path = Vendor/MetalSplatter; sourceTree = SOURCE_ROOT; };
+		FE556E6E3AF706A173C8D355 /* SplativerseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplativerseApp.swift; sourceTree = "<group>"; };
+		F119A1100000000000000001 /* FlightHandTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightHandTracker.swift; sourceTree = "<group>"; };
+		F119A1100000000000000011 /* FlightJoystickRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightJoystickRenderer.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EBB16A900D13C5791B854F5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				244A7309D63796225C6E5D36 /* SplativerseCore in Frameworks */,
+				BCFCBF9FF629BD54CA8E35A5 /* MetalSplatter in Frameworks */,
+				5F46E6C60D5D96B856BD93ED /* SplatIO in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		620B7C0E65670ACB6FD8A7A2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0E618504946C90255488AB5 /* LibraryView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7ED4B12E3BC8F041FA6216E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				130E2F48B5C09BF9DBD586E4 /* Splativerse.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AF1DA5361BC4CC344491EF25 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B033F393F17427BD6EA82E28 /* AppModel.swift */,
+				FE556E6E3AF706A173C8D355 /* SplativerseApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B837C4B2D1E1C1248DFA84D8 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				5AEB9C499E131E490CE4BC99 /* SplativerseCore */,
+				F766D2D806CB28B5B380BF8D /* MetalSplatter */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		C929D1E18CC95EA83D32F35C = {
+			isa = PBXGroup;
+			children = (
+				D8D117711DCD1D9A865CC921 /* Splativerse */,
+				B837C4B2D1E1C1248DFA84D8 /* Packages */,
+				7ED4B12E3BC8F041FA6216E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D8D117711DCD1D9A865CC921 /* Splativerse */ = {
+			isa = PBXGroup;
+			children = (
+				9A0698F7041BA6F07966CB91 /* Info.plist */,
+				AF1DA5361BC4CC344491EF25 /* App */,
+				FC778DB2D3283BB44CFFE5D4 /* Rendering */,
+				620B7C0E65670ACB6FD8A7A2 /* Views */,
+			);
+			path = Splativerse;
+			sourceTree = "<group>";
+		};
+		FC778DB2D3283BB44CFFE5D4 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				F119A1100000000000000001 /* FlightHandTracker.swift */,
+				F119A1100000000000000011 /* FlightJoystickRenderer.swift */,
+				94B6D3FB10719213D4E55B3E /* RenderControl.swift */,
+				D562445AE96844A205509A67 /* VisionScanRenderer.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		069EA6A5C7D81B4705126491 /* Splativerse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4C33150EC278594FFEC7EF6 /* Build configuration list for PBXNativeTarget "Splativerse" */;
+			buildPhases = (
+				E09CB02509076383AB9B39ED /* Sources */,
+				EBB16A900D13C5791B854F5E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Splativerse;
+			packageProductDependencies = (
+				C382CCAECEF9946DAB08AEB8 /* SplativerseCore */,
+				E380ADC9302D685ABB135537 /* MetalSplatter */,
+				D3190AFD02DF292F9CCFAB39 /* SplatIO */,
+			);
+			productName = Splativerse;
+			productReference = 130E2F48B5C09BF9DBD586E4 /* Splativerse.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		539E93D22A589CECBE6BC223 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2720;
+				TargetAttributes = {
+					069EA6A5C7D81B4705126491 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 93281C10ADBD0A8A98AF6A77 /* Build configuration list for PBXProject "Splativerse" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C929D1E18CC95EA83D32F35C;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C810BCB8B89D2A7F438F6E92 /* XCLocalSwiftPackageReference "Packages/SplativerseCore" */,
+				6FCC2BF6A5D5FB41B03FB5D3 /* XCLocalSwiftPackageReference "Vendor/MetalSplatter" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 7ED4B12E3BC8F041FA6216E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				069EA6A5C7D81B4705126491 /* Splativerse */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E09CB02509076383AB9B39ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9E935FB44BE3AF98ADD3BF44 /* AppModel.swift in Sources */,
+				A03285E3568F96B62221C7D7 /* SplativerseApp.swift in Sources */,
+				B4D89F2D3B8836EB280FC221 /* LibraryView.swift in Sources */,
+				F119A1100000000000000002 /* FlightHandTracker.swift in Sources */,
+				F119A1100000000000000012 /* FlightJoystickRenderer.swift in Sources */,
+				7D4B05B9A259556E48129562 /* RenderControl.swift in Sources */,
+				BDED04E914A4CE4C480D5F42 /* VisionScanRenderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6CCC9F94FB419066245A34DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		7DFEF83CD717D4E0C1B1D759 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		DFF970DD698AF7FC983C3394 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9Q3FCK2997;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Splativerse/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.splativerse.vision;
+				PRODUCT_NAME = Splativerse;
+				SDKROOT = xros;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Debug;
+		};
+		E6C026F6E1A9E17994C2468C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9Q3FCK2997;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Splativerse/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.splativerse.vision;
+				PRODUCT_NAME = Splativerse;
+				SDKROOT = xros;
+				TARGETED_DEVICE_FAMILY = 7;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		93281C10ADBD0A8A98AF6A77 /* Build configuration list for PBXProject "Splativerse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CCC9F94FB419066245A34DD /* Debug */,
+				7DFEF83CD717D4E0C1B1D759 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F4C33150EC278594FFEC7EF6 /* Build configuration list for PBXNativeTarget "Splativerse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFF970DD698AF7FC983C3394 /* Debug */,
+				E6C026F6E1A9E17994C2468C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		6FCC2BF6A5D5FB41B03FB5D3 /* XCLocalSwiftPackageReference "Vendor/MetalSplatter" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Vendor/MetalSplatter;
+		};
+		C810BCB8B89D2A7F438F6E92 /* XCLocalSwiftPackageReference "Packages/SplativerseCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/SplativerseCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C382CCAECEF9946DAB08AEB8 /* SplativerseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SplativerseCore;
+		};
+		D3190AFD02DF292F9CCFAB39 /* SplatIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SplatIO;
+		};
+		E380ADC9302D685ABB135537 /* MetalSplatter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MetalSplatter;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 539E93D22A589CECBE6BC223 /* Project object */;
+}

@@ -1,0 +1,92 @@
+name: Splativerse
+options:
+  bundleIdPrefix: com.splativerse
+  deploymentTarget:
+    visionOS: "26.0"
+  xcodeVersion: "27.2"
+packages:
+  SplativerseCore:
+    path: Packages/SplativerseCore
+  MetalSplatter:
+    path: Vendor/MetalSplatter
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    CLANG_CXX_LANGUAGE_STANDARD: gnu++20
+    MTL_FAST_MATH: YES
+    TARGETED_DEVICE_FAMILY: "7"
+    SUPPORTED_PLATFORMS: "xros xrsimulator"
+    SUPPORTS_MACCATALYST: NO
+    SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+  configs:
+    Debug:
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+    Release:
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
+      SWIFT_COMPILATION_MODE: wholemodule
+targets:
+  Splativerse:
+    type: application
+    platform: visionOS
+    sources:
+      - path: Splativerse
+    info:
+      path: Splativerse/Info.plist
+      properties:
+        CFBundleDisplayName: Splativerse
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSHandsTrackingUsageDescription: Splativerse uses hand tracking so you can pinch the flight joystick and position its panel to explore your scans.
+        NSWorldSensingUsageDescription: Splativerse uses your headset pose to let you walk inside your scans.
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+          UIApplicationPreferredDefaultSceneSessionRole: UIWindowSceneSessionRoleApplication
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: com.splativerse.scan.ply
+            UTTypeDescription: Gaussian Splat PLY
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [ply]
+          - UTTypeIdentifier: com.splativerse.scan.spz
+            UTTypeDescription: Compressed Gaussian Splats
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [spz]
+          - UTTypeIdentifier: com.splativerse.scan.splat
+            UTTypeDescription: Gaussian Splats
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [splat]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Gaussian Splat Scan
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [com.splativerse.scan.ply, com.splativerse.scan.spz, com.splativerse.scan.splat]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.splativerse.vision
+        PRODUCT_NAME: Splativerse
+        GENERATE_INFOPLIST_FILE: NO
+    dependencies:
+      - package: SplativerseCore
+      - package: MetalSplatter
+        product: MetalSplatter
+      - package: MetalSplatter
+        product: SplatIO
+schemes:
+  Splativerse:
+    build:
+      targets:
+        Splativerse: all
+    run:
+      config: Release
+    archive:
+      config: Release
