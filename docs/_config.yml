@@ -1,0 +1,14 @@
+title: Splativerse
+description: Explore your Gaussian Splat captures in an immersive space on Apple Vision Pro.
+url: https://ncubeeight.github.io
+baseurl: /Splativerse-for-visionOS
+repository: ncubeeight/Splativerse-for-visionOS
+lang: en
+markdown: kramdown
+kramdown:
+  input: GFM
+permalink: pretty
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

@@ -1,0 +1,9 @@
+Splativerse for visionOS
+Copyright 2026 Christopher Arnold
+
+Original Splativerse source code and documentation are licensed under the
+Apache License, Version 2.0. See LICENSE.
+
+This product includes software from MetalSplatter (Copyright 2026 Sean Cier)
+and spz-swift (Copyright 2024 Niantic Labs; Swift port by Sean Cier, 2026), which remain under their respective MIT licenses.
+See THIRD_PARTY_NOTICES.md and the LICENSE files in Vendor/ for full notices.

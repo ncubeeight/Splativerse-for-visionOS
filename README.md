@@ -2,6 +2,10 @@
 
 A native SwiftUI and Metal app for entering large Gaussian-splat environments. This is an Xcode source project, not an App Store release or a signed installable IPA.
 
+## TestFlight preparation
+
+Version 1.0 (1), bundle ID `com.splativerse.vision`, now includes the supplied Splativerse logo as the visionOS app icon, privacy manifest, third-party notices, and export-compliance metadata. A signed Release archive was produced and verified. App Store Connect IPA export could not finish because the command-line exporter could not access the Xcode account credentials or obtain an App Store provisioning profile. Nothing has been uploaded. Open the archive in Xcode Organizer to finish distribution with your developer account. See `Distribution/UPLOAD.txt` and `Distribution/BETA-NOTES.txt`.
+
 ## Run on your Vision Pro
 
 1. Open `Splativerse.xcodeproj` in Xcode 26 or newer with the visionOS SDK installed. The project was compiled here with Xcode 27.2.
@@ -94,6 +98,8 @@ The reported black boxes have not been reproduced here. A new GPU pixel regressi
 
 ## File compatibility and large scans
 
+Unsupported PLY property types report the property name, declared type, and expected type (for example, `x` declared as `double` when the reader expects `float`). Types are not silently reinterpreted. The reported “unexpected x value” has not been matched to a user-provided file; a synthetic unsupported-`x` fixture reproduces the closest error path.
+
 PLY must contain Gaussian-splat attributes (position, scale, opacity, rotation, and color or spherical harmonics), not just an arbitrary mesh or XYZ point cloud. The included SPZ decoder supports format versions **1–3**; newer unsupported versions report a load error. Standard 32-byte `.splat` files are also supported.
 
 Unlike the design preview, the app has no 128 MB import limit. Import hashing releases temporary read buffers after each 1 MiB chunk to avoid accumulating large scans in memory. Loading uses bounded, lossless decode queues and GPU chunks of up to 250,000 splats. The app checks a conservative GPU working-set budget and reports allocation/format failures instead of intentionally downsampling a scan. The SPZ codec still decompresses its packed payload in memory, and the renderer retains the scene and sort buffers in memory. This is **not an out-of-core or level-of-detail streaming engine**; the largest workable scan depends on headset memory, SH degree, and scene complexity. Frame rate and thermal behavior must be measured on the target headset.
@@ -102,7 +108,7 @@ The renderer’s original shader source is bundled and compiled by Metal on the 
 
 ## Loading recovery and diagnostics
 
-Each immersive session has an ID: shutdown from an old scene cannot stop a new one. New sessions wait for previous loading, sorting, background capture, and GPU work to drain. In-place Previous/Next switches also release the outgoing scan before starting the next allocation. Sort-buffer allocation failures throw an error instead of leaving initial capture waiting indefinitely. A persistent **Scan could not stay open** card records a load error or unexpected startup dismissal and its last loading stage.
+Each immersive session has an ID: shutdown from an old scene cannot stop a new one. New sessions wait for previous loading, sorting, background capture, and GPU work to drain. In-place Previous/Next switches also release the outgoing scan before starting the next allocation. Sort-buffer allocation failures throw an error instead of leaving initial capture waiting indefinitely. A persistent **Scan loading issue** card records a load error or unexpected startup dismissal and its last loading stage. File/decode/allocation failures keep immersion open after releasing the failed scan’s resources. The panel shows **Scan unavailable**, flight is paused, and Previous/Next remain available at valid library positions. The menu opens to show the failed filename and original error. Rendering/session failures still close immersion when continuing is not possible.
 
 Console logs under subsystem `com.splativerse.vision`, categories `ScanLifecycle` and `PanelMenu`, include load/cleanup Metal allocation counts, errors, and menu visibility changes. No recent headset crash report was available here, so memory pressure or caching has not been confirmed as the cause of the reported opening/closing flicker. A system process kill can still prevent an in-app error from being recorded. No imported scans or user caches are deleted by these changes.
 
@@ -110,10 +116,10 @@ Console logs under subsystem `com.splativerse.vision`, categories `ScanLifecycle
 
 - Release build for generic Apple Vision Pro, unsigned: **passed**.
 - Release build for visionOS Simulator with ad-hoc signing enabled: **passed**. App and renderer bundle passed strict signature verification; all five shader files were verified unchanged in the app.
-- Core library/navigation/radius/spawn/flight unit tests: **52 passed** (including look-and-pinch targeting of rotated/raised buttons, direct touches, one action per release, cancelled gestures, drag-off, invalid rays, disabled endpoints, legacy catalog decoding, radius persistence and limits, sparse outlier rejection, nearby opening selection, bounded deterministic sampling, return-to-start heading, flight directions and speed limits, neutral/release behavior, pinch hysteresis, tracking loss, pause, either-hand ownership, live headset-directed travel, no artificial pitch/roll, static placement, radial facing and off-center grasp retention, lower rail separation, scan endpoints, loading controls, session cleanup gating, exclusive panel dragging, height/distance controls, recovery at seated height, rigid lever tilt, invalid samples, and frame-rate-independent movement). File-provider coordination and bookmark creation use an injected local adapter in these host tests; the actual system boundary remains an on-device check.
+- Core library/navigation/radius/spawn/flight unit tests: **53 passed** (including look-and-pinch targeting of rotated/raised buttons, direct touches, one action per release, cancelled gestures, drag-off, invalid rays, disabled endpoints, legacy catalog decoding, radius persistence and limits, sparse outlier rejection, nearby opening selection, bounded deterministic sampling, return-to-start heading, flight directions and speed limits, neutral/release behavior, pinch hysteresis, tracking loss, pause, either-hand ownership, live headset-directed travel, no artificial pitch/roll, static placement, radial facing and off-center grasp retention, lower rail separation, scan endpoints, loading controls, session cleanup gating, exclusive panel dragging, height/distance controls, recovery at seated height, rigid lever tilt, invalid samples, and frame-rate-independent movement). File-provider coordination and bookmark creation use an injected local adapter in these host tests; the actual system boundary remains an on-device check.
 - Additional AppModel/RenderControl integration check with a temporary folder: next/previous queued the correct files in `Room1 → Room2 → Room10` natural order and back, preserved the immersive session ID, synchronized the selected record, rejected endpoint navigation, and ignored unrelated menu-row selection. This tests command routing; actual file rendering remains a headset check.
 - Upstream PLY/SPZ/SPLAT I/O tests: **28 passed**.
-- Added slow-consumer/backpressure and truncated-PLY tests: **3 passed**.
+- Added slow-consumer/backpressure, truncated-PLY, and unsupported-coordinate-type diagnostics tests: **4 passed**.
 - Bubble geometry, unit conversion, cube-face alignment, and shader uniform layout: **5 passed**. Three Metal-dependent checks (moving sort subset, six-face pixel capture, and large/invalid splat pixel regression) are skipped when the host has no accessible Metal device.
 - No Vision Pro was attached. The flight-panel shader passed offline compilation and linking for device and simulator with Apple Metal 32023.922. Actual pipeline creation, stereo appearance, system-delivered gaze/pinch events, Files provider access, and performance have **not** been verified on a headset.
 
@@ -130,7 +136,7 @@ Before using your largest scan, try `Samples/Splativerse-Demo.ply` and `Samples/
 3. Scan Downloads again and verify identical files are skipped. Relaunch and confirm the chosen folder can be read again.
 4. Enter a scan; confirm stereo depth and correct world scale. Translate your head and walk a small distance; the scan should stay anchored.
 5. Check steps, height changes, Return to start, and turning in place. Confirm the starting point is near the dense region on a city-scale scan and adjust source units/up direction if needed. Exit during a large load and reopen another scan.
-6. Try a malformed file and an unavailable cloud file; verify a recoverable error is shown.
+6. Enter a malformed/unsupported file directly and through Previous/Next. Verify immersion stays open with a blue backdrop and Scan unavailable label, the menu shows the filename and reason, no loading spinner remains, flight stays paused, and Previous/Next can load adjacent valid files. Menu/Exit must still work. Test an unavailable cloud file too.
 7. Verify the live splat count changes when walking or stepping; turning in place must not refresh the panorama.
 8. At the default 60 m radius, move at least 5 m and check that the distant capture refreshes while nearby splats remain live. Check all six directions, stereo alignment, the 55–60 m overlap, and the manual refresh button.
 9. Try 60, 120, 180, 240, 300, and 360 m while inside the scan; confirm the active radius and live count update after preparation, both eyes switch together, rapid changes and exit are handled, and the setting persists after relaunch. At 360 m, verify the 355–360 m overlap and compare frame time with 60 m.
@@ -143,3 +149,11 @@ Before using your largest scan, try `Samples/Splativerse-Demo.ply` and `Samples/
 16. Profile a representative large scan with Instruments before distribution; compare frame times with the previous full-scene renderer.
 
 See `THIRD_PARTY_NOTICES.md` for dependency versions, licenses, and integration changes.
+
+## Website and privacy
+
+The [project website](https://ncubeeight.github.io/Splativerse-for-visionOS/) and [privacy policy](https://ncubeeight.github.io/Splativerse-for-visionOS/privacy/) are built from `docs/` using Jekyll on GitHub Pages.
+
+## License
+
+Original Splativerse code and documentation are licensed under the [Apache License 2.0](LICENSE). Vendored dependencies and adapted third-party code retain their MIT notices; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `Vendor/`.
